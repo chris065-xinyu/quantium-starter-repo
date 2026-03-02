@@ -17,9 +17,11 @@ for file in files:
     df.columns = [col.strip().lower() for col in df.columns]
 
     # 只保留 Pink Morsels
-    df = df[df["product"].str.lower() == "pink morsels"]
+    df = df[df["product"].astype(str).str.strip().str.lower() == "pink morsel"]
 
     # 计算 Sales
+    df["price"] = df["price"].astype(str).str.replace("$", "", regex=False)
+    df["price"] = pd.to_numeric(df["price"], errors="coerce")
     df["sales"] = df["quantity"] * df["price"]
 
     # 只保留需要的列
